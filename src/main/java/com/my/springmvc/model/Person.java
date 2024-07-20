@@ -25,10 +25,10 @@ public class Person {
 
     public Person() {}
 
-    public Person(int id, String firstname, String lastname, String nickname, String email, String birthday, String city) {
+    public Person(int id, String firstName, String lastName, String nickname, String email, String birthday, String city) {
         this.id = id;
-        this.firstName = firstname;
-        this.lastName = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.nickname = nickname;
         this.email = email;
         this.birthday = birthday;
