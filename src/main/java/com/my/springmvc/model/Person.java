@@ -1,10 +1,18 @@
 package com.my.springmvc.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
-public class Person {
+import java.time.LocalDate;
 
+public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private int id;
 
     @NotEmpty(message = "Поле обязательно для заполнения")
@@ -19,13 +27,13 @@ public class Person {
     @Email(message = "Это не Email")
     private String email;
 
-    private String birthday;
+    private LocalDate birthday;
 
     private String city;
 
     public Person() {}
 
-    public Person(int id, String firstName, String lastName, String nickname, String email, String birthday, String city) {
+    public Person(int id, String firstName, String lastName, String nickname, String email, LocalDate birthday, String city) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,20 +51,20 @@ public class Person {
         this.id = id;
     }
 
-    public String getFirstname() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstName = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastName = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getNickname() {
@@ -75,11 +83,11 @@ public class Person {
         this.email = email;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

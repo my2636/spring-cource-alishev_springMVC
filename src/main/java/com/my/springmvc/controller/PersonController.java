@@ -2,12 +2,12 @@ package com.my.springmvc.controller;
 
 import com.my.springmvc.dao.PersonDAO;
 import com.my.springmvc.model.Person;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/persons")
@@ -30,4 +30,26 @@ public class PersonController {
     public String newPerson(@ModelAttribute("person") Person person) {
         return "persons/new";
     }
+
+    @PostMapping()
+    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "persons/new";
+        }
+
+        personDAO.save(person);
+        return "redirect:/persons";
+    }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("person", personDAO.show(id));
+        return "persons/show";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable("id") int id, Model model) {
+        model.addAttribute()
+    }
+
 }

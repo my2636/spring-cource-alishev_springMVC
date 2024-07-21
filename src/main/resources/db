@@ -1,11 +1,15 @@
 create table person (
-	id serial2 primary key,
-	firstname varchar(40) not null,
-	lastname varchar(50) not null,
+	id serial primary key ,
+	first_name varchar(40) not null,
+	last_name varchar(50) not null,
 	nickname varchar(20),
 	email varchar(50) unique not null,
 	birthday date,
 	city varchar(70))
+
+	drop table person cascade
+
+	select * from person
 
 create table vacation_type (
 	id serial2 primary key,
