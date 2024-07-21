@@ -14,6 +14,7 @@
 <p th:text="${person.getBirthday()}">VALUE</p>
 <p th:text="${person.getCity()}">VALUE</p>
 
+<a th:href="@{/persons/{id}/edit(id=${person.getId()})}">Редактировать</a>
 
 
 
