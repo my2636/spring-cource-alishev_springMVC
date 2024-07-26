@@ -1,6 +1,7 @@
 package com.my.springmvc.controller;
 
 import com.my.springmvc.dao.PersonDAO;
+import com.my.springmvc.dao.VacationDAO;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class PersonController {
 
     private final PersonDAO personDAO;
+    private final VacationDAO vacationDAO;
 
     @Autowired
-    public PersonController(PersonDAO personDAO) {
+    public PersonController(PersonDAO personDAO, VacationDAO vacationDAO) {
         this.personDAO = personDAO;
+        this.vacationDAO = vacationDAO;
     }
 
     @GetMapping

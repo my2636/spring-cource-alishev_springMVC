@@ -6,7 +6,7 @@ public class Vacation {
 
     private int id;
 
-    private int userId;
+    private int personId;
 
     @NotEmpty(message = "Поле обязательно для заполнения")
     private String vacationName;
@@ -18,7 +18,7 @@ public class Vacation {
 
     public Vacation(int id, int userId, String vacationName, String vacationDate, boolean isPlanned) {
         this.id = id;
-        this.userId = userId;
+        this.personId = userId;
         this.vacationName = vacationName;
         this.vacationDate = vacationDate;
         this.isPlanned = isPlanned;
@@ -33,11 +33,11 @@ public class Vacation {
     }
 
     public int getUserId() {
-        return userId;
+        return personId;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.personId = userId;
     }
 
     public String getVacationName() {

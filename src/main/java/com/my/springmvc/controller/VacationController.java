@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/vacations")
 public class VacationController {
-    private final VacationDAO vacationDAO;
+    /*private final VacationDAO vacationDAO;
 
     @Autowired
     public VacationController(VacationDAO vacationDAO) {
@@ -67,5 +67,5 @@ public class VacationController {
     public String delete(@PathVariable("id") int id) {
         vacationDAO.delete(id);
         return "redirect:/vacations";
-    }
+    }*/
 }
