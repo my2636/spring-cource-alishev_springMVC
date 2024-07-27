@@ -2,6 +2,8 @@ package com.my.springmvc.model;
 
 import jakarta.validation.constraints.NotEmpty;
 
+import java.time.LocalDate;
+
 public class Vacation {
 
     private int id;
@@ -12,15 +14,21 @@ public class Vacation {
     private String vacationName;
 
     @NotEmpty(message = "Поле обязательно для заполнения")
-    private String vacationDate;
+    private LocalDate dateStart;
+
+    @NotEmpty(message = "Поле обязательно для заполнения")
+    private LocalDate dateFinish;
 
     private boolean isPlanned;
 
-    public Vacation(int id, int userId, String vacationName, String vacationDate, boolean isPlanned) {
+    public Vacation() {}
+
+    public Vacation(int id, int personId, String vacationName, LocalDate dateStart, LocalDate dateFinish, boolean isPlanned) {
         this.id = id;
-        this.personId = userId;
+        this.personId = personId;
         this.vacationName = vacationName;
-        this.vacationDate = vacationDate;
+        this.dateStart = dateStart;
+        this.dateFinish = dateFinish;
         this.isPlanned = isPlanned;
     }
 
@@ -32,12 +40,12 @@ public class Vacation {
         this.id = id;
     }
 
-    public int getUserId() {
+    public int getPersonId() {
         return personId;
     }
 
-    public void setUserId(int userId) {
-        this.personId = userId;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     public String getVacationName() {
@@ -48,12 +56,20 @@ public class Vacation {
         this.vacationName = vacationName;
     }
 
-    public String getVacationDate() {
-        return vacationDate;
+    public LocalDate getDateStart() {
+        return dateStart;
     }
 
-    public void setVacationDate(String vacationDate) {
-        this.vacationDate = vacationDate;
+    public void setDateStart(LocalDate vacationDate) {
+        this.dateStart = vacationDate;
+    }
+
+    public LocalDate getDateFinish() {
+        return dateFinish;
+    }
+
+    public void setDateFinish(LocalDate dateFinish) {
+        this.dateFinish = dateFinish;
     }
 
     public boolean isPlanned() {

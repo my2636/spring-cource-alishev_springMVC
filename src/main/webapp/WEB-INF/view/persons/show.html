@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователь</title>
+</head>
+<body>
+
+<p th:text="${person.getId()}">VALUE</p>
+<p th:text="${person.getFirstName()}">VALUE</p>
+<p th:text="${person.getLastName()}">VALUE</p>
+<p th:text="${person.getNickname()}">VALUE</p>
+<p th:text="${person.getEmail()}">VALUE</p>
+<p th:text="${person.getBirthday()}">VALUE</p>
+<p th:text="${person.getCity()}">VALUE</p>
+
+<br/>
+
+<a th:href="@{/persons/{id}/edit(id=${person.getId()})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/persons/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete"/>
+</form>
+<br/>
+<h3>Список отпусков:</h3>
+<div th:each="vacation : ${vacations}">
+    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getId()}">vacation</a>
+    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getPersonId()}">vacation</a>
+    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getVacationName()}">vacation</a>
+    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateStart()}">vacation</a>
+    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateFinish()}">vacation</a>
+</div>
+
+</body>
+</html>

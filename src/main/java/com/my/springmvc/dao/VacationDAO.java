@@ -1,6 +1,5 @@
 package com.my.springmvc.dao;
 
-import com.my.springmvc.model.Person;
 import com.my.springmvc.model.Vacation;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +16,6 @@ public class VacationDAO {
     }
 
     public List<Vacation> index(int personId) {
-        return jdbcTemplate.query("SELECT * FROM Vacations WHERE user_id=?", new Object[]{personId}, new BeanPropertyRowMapper<>(Vacation.class));
+        return jdbcTemplate.query("SELECT * FROM Vacation WHERE person_id=?", new Object[]{personId}, new BeanPropertyRowMapper<>(Vacation.class));
     }
 }
