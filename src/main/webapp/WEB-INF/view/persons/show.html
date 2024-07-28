@@ -19,9 +19,10 @@
 <a th:href="@{/persons/{id}/edit(id=${person.getId()})}">Редактировать</a>
 
 <form th:method="DELETE" th:action="@{/persons/{id}(id=${person.getId()})}">
-    <input type="submit" value="Delete"/>
+    <input type="submit" value="Удалить"/>
 </form>
 <br/>
+
 <h3>Список отпусков:</h3>
 <div th:each="vacation : ${vacations}">
     <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getId()}">vacation</a>
@@ -29,6 +30,8 @@
     <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getVacationName()}">vacation</a>
     <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateStart()}">vacation</a>
     <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateFinish()}">vacation</a>
+    <br/>
+    <a href="/persons/{id}/">Добавить отпуск</a>
 </div>
 
 </body>
