@@ -5,10 +5,13 @@ import com.my.springmvc.dao.VacationDAO;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/persons")
@@ -45,21 +48,21 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("person", personDAO.show(id));
         model.addAttribute("vacations", vacationDAO.index(id));
         return "persons/show";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") UUID id) {
         model.addAttribute("person", personDAO.show(id));
         return "persons/edit";
     }
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
-                         @PathVariable("id") int id) {
+                         @PathVariable("id") UUID id) {
         if(bindingResult.hasErrors()) {
             return "persons/edit";
         }
@@ -68,9 +71,10 @@ public class PersonController {
         return "redirect:/persons";
     }
 
-    @DeleteMapping("/id")
-    public String delete(@PathVariable("id") int id) {
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable("id") UUID id) {
         personDAO.delete(id);
+        vacationDAO.delete(id);
         return "redirect:/persons";
     }
 }
