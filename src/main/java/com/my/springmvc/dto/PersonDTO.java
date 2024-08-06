@@ -1,10 +1,12 @@
 package com.my.springmvc.dto;
 
 import com.my.springmvc.model.Vacation;
+import lombok.Data;
 
 import java.util.List;
 
-public class PersonVacationsDTO {
+@Data
+public class PersonDTO {
     int personId;
     String personFullName;
     String personNickname;

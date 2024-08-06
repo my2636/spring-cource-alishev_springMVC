@@ -5,7 +5,6 @@ import com.my.springmvc.dao.VacationDAO;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +25,7 @@ public class PersonController {
         this.vacationDAO = vacationDAO;
     }
 
+    // person
     @GetMapping
     public String index(Model model) {
         model.addAttribute("persons", personDAO.index());
@@ -77,4 +77,8 @@ public class PersonController {
         vacationDAO.delete(id);
         return "redirect:/persons";
     }
+
+    // person vacations
+
+
 }
