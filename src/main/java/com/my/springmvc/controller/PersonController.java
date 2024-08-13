@@ -1,6 +1,7 @@
 package com.my.springmvc.controller;
 
-import com.my.springmvc.dao.PersonDAO;
+import com.my.springmvc.dao.JdbcPersonDAO;
+import com.my.springmvc.dao.JpaPersonDAO;
 import com.my.springmvc.dao.VacationDAO;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
@@ -16,19 +17,21 @@ import java.util.UUID;
 @RequestMapping("/persons")
 public class PersonController {
 
-    private final PersonDAO personDAO;
+    private final JdbcPersonDAO JdbcPersonDAO;
     private final VacationDAO vacationDAO;
+    private final JpaPersonDAO jpaPersonDAO;
 
     @Autowired
-    public PersonController(PersonDAO personDAO, VacationDAO vacationDAO) {
-        this.personDAO = personDAO;
+    public PersonController(JdbcPersonDAO JdbcPersonDAO, VacationDAO vacationDAO, JpaPersonDAO jpaPersonDAO) {
+        this.JdbcPersonDAO = JdbcPersonDAO;
         this.vacationDAO = vacationDAO;
+        this.jpaPersonDAO = jpaPersonDAO;
     }
 
     // person
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("persons", personDAO.index());
+        model.addAttribute("persons", jpaPersonDAO.index());
         return "persons/index";
     }
 
@@ -43,20 +46,20 @@ public class PersonController {
             return "persons/new";
         }
 
-        personDAO.save(person);
+        JdbcPersonDAO.save(person);
         return "redirect:/persons";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", JdbcPersonDAO.show(id));
         model.addAttribute("vacations", vacationDAO.index(id));
         return "persons/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
-        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("person", JdbcPersonDAO.show(id));
         return "persons/edit";
     }
 
@@ -67,13 +70,13 @@ public class PersonController {
             return "persons/edit";
         }
 
-        personDAO.update(id, person);
+        JdbcPersonDAO.update(id, person);
         return "redirect:/persons";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
-        personDAO.delete(id);
+        JdbcPersonDAO.delete(id);
         vacationDAO.delete(id);
         return "redirect:/persons";
     }

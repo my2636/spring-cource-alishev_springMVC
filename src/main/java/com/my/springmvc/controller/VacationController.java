@@ -24,4 +24,13 @@ public class VacationController {
         return "vacations/show";
     }
 
+/*
+    @GetMapping("/{userId}")
+    public String showVacations(@PathVariable("userId") UUID id, Model model) {
+        model.addAttribute("vacation", vacationDAO.show(id));
+        return "vacations/show";
+    }
+*/
+
+
 }
