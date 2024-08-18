@@ -93,7 +93,6 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public HikariDataSource dataSource() {
-        HikariDataSource dataSource;
         HikariConfig config = new HikariConfig();
 
         config.setDriverClassName(environment.getRequiredProperty("db.driver"));
@@ -106,7 +105,7 @@ public class AppConfig implements WebMvcConfigurer {
         config.setMinimumIdle(Integer.valueOf(environment.getRequiredProperty("db.minIdle")));
         config.setMaxLifetime(Long.valueOf(environment.getRequiredProperty("db.maxLifetime")));
 
-        return dataSource = new HikariDataSource(config);
+        return new HikariDataSource(config);
     }
 
     @Bean

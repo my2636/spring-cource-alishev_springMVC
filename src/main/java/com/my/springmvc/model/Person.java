@@ -13,20 +13,22 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
+@Table(name = "person")
 @Getter
 @Setter
-@Table(name = "person")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
     @Id
+    @Getter
     @UuidGenerator
     private UUID id;
 
-    @Getter
-    @Setter
+
     @Column(name = "first_name")
     @NotEmpty(message = "Поле обязательно для заполнения")
+    @Getter
+    @Setter
     private String firstName;
 
     @Getter

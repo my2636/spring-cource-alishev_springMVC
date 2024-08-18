@@ -3,6 +3,7 @@ package com.my.springmvc.dao;
 import com.my.springmvc.model.Person;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +24,14 @@ public class JpaPersonDAO implements PersonDAO{
 
     @Override
     public void save(Person person) {
-
+        entityManager.persist(person);
     }
 
     @Override
     public Person show(UUID id) {
-        return entityManager.createQuery("SELECT p FROM Person p where id =");
+        TypedQuery<Person> typedQuery = entityManager.createQuery("SELECT p FROM Person p where p.id = :id", Person.class);
+        typedQuery.setParameter("id", id);
+        return typedQuery.getResultList().stream().findAny().orElse(null);
 
     }
 

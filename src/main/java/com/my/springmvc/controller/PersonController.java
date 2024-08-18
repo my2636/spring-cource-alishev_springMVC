@@ -2,10 +2,11 @@ package com.my.springmvc.controller;
 
 import com.my.springmvc.dao.JdbcPersonDAO;
 import com.my.springmvc.dao.JpaPersonDAO;
-import com.my.springmvc.dao.VacationDAO;
+import com.my.springmvc.dao.JdbcVacationDAO;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,13 +19,16 @@ import java.util.UUID;
 public class PersonController {
 
     private final JdbcPersonDAO JdbcPersonDAO;
-    private final VacationDAO vacationDAO;
+    private final JdbcVacationDAO jdbcVacationDAO;
+
+    @Autowired
+    @Qualifier("jpaPersonDAO")
     private final JpaPersonDAO jpaPersonDAO;
 
     @Autowired
-    public PersonController(JdbcPersonDAO JdbcPersonDAO, VacationDAO vacationDAO, JpaPersonDAO jpaPersonDAO) {
+    public PersonController(JdbcPersonDAO JdbcPersonDAO, JdbcVacationDAO jdbcVacationDAO, JpaPersonDAO jpaPersonDAO) {
         this.JdbcPersonDAO = JdbcPersonDAO;
-        this.vacationDAO = vacationDAO;
+        this.jdbcVacationDAO = jdbcVacationDAO;
         this.jpaPersonDAO = jpaPersonDAO;
     }
 
@@ -46,20 +50,20 @@ public class PersonController {
             return "persons/new";
         }
 
-        JdbcPersonDAO.save(person);
+        jpaPersonDAO.save(person);
         return "redirect:/persons";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("person", JdbcPersonDAO.show(id));
-        model.addAttribute("vacations", vacationDAO.index(id));
+        model.addAttribute("person", jpaPersonDAO.show(id));
+        model.addAttribute("vacations", jdbcVacationDAO.index(id));
         return "persons/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
-        model.addAttribute("person", JdbcPersonDAO.show(id));
+        model.addAttribute("person", jpaPersonDAO.show(id));
         return "persons/edit";
     }
 
@@ -77,7 +81,7 @@ public class PersonController {
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
         JdbcPersonDAO.delete(id);
-        vacationDAO.delete(id);
+        jdbcVacationDAO.delete(id);
         return "redirect:/persons";
     }
 
