@@ -3,6 +3,7 @@ package com.my.springmvc.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,6 +29,7 @@ import java.util.Properties;
 @ComponentScan("com.my.springmvc")
 @PropertySource("classpath:database.properties")
 @EnableWebMvc
+@EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -68,18 +71,24 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setShowSql(true);
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+
+
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPackagesToScan(environment.getRequiredProperty("db.entity.package"));
-        entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+ //       entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
         return entityManagerFactoryBean;
     }
 
     
 
-    private Properties getHibernateProperties() {
+/*    private Properties getHibernateProperties() {
         try {
             Properties properties = new Properties();
             InputStream is = getClass().getClassLoader().getResourceAsStream("hibernate.properties");
@@ -89,7 +98,7 @@ public class AppConfig implements WebMvcConfigurer {
             throw new IllegalArgumentException("Can't load resource", e);
         }
 
-    }
+    }*/
 
     @Bean
     public HikariDataSource dataSource() {
@@ -109,10 +118,8 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public PlatformTransactionManager platformTransactionManager() {
-        JpaTransactionManager manager = new JpaTransactionManager();
-        manager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return manager;
+    public PlatformTransactionManager transactionManager() {
+        return new JpaTransactionManager(entityManagerFactory().getObject());
     }
 
     @Bean

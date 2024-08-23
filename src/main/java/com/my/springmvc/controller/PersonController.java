@@ -1,12 +1,9 @@
 package com.my.springmvc.controller;
 
-import com.my.springmvc.dao.JdbcPersonDAO;
-import com.my.springmvc.dao.JpaPersonDAO;
-import com.my.springmvc.dao.JdbcVacationDAO;
+import com.my.springmvc.dao.*;
 import com.my.springmvc.model.Person;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,16 +16,13 @@ import java.util.UUID;
 public class PersonController {
 
     private final JdbcPersonDAO JdbcPersonDAO;
-    private final JdbcVacationDAO jdbcVacationDAO;
+    private final JpaVacationDAO jpaVacationDAO;
+    private final PersonDAO jpaPersonDAO;
 
     @Autowired
-    @Qualifier("jpaPersonDAO")
-    private final JpaPersonDAO jpaPersonDAO;
-
-    @Autowired
-    public PersonController(JdbcPersonDAO JdbcPersonDAO, JdbcVacationDAO jdbcVacationDAO, JpaPersonDAO jpaPersonDAO) {
+    public PersonController(JdbcPersonDAO JdbcPersonDAO, JpaVacationDAO jpaVacationDAO, PersonDAO jpaPersonDAO) {
         this.JdbcPersonDAO = JdbcPersonDAO;
-        this.jdbcVacationDAO = jdbcVacationDAO;
+        this.jpaVacationDAO = jpaVacationDAO;
         this.jpaPersonDAO = jpaPersonDAO;
     }
 
@@ -57,7 +51,7 @@ public class PersonController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("person", jpaPersonDAO.show(id));
-        model.addAttribute("vacations", jdbcVacationDAO.index(id));
+        model.addAttribute("vacations", jpaVacationDAO.index(id));
         return "persons/show";
     }
 
@@ -81,7 +75,7 @@ public class PersonController {
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
         JdbcPersonDAO.delete(id);
-        jdbcVacationDAO.delete(id);
+//        jdbcVacationDAO.delete(id);
         return "redirect:/persons";
     }
 
