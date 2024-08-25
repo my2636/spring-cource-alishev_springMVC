@@ -4,24 +4,27 @@ import com.my.springmvc.model.Person;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
-@Component
-@Transactional
+@Repository
 public class JpaPersonDAO implements PersonDAO {
 
-    @PersistenceContext(unitName = "entityManagerFactory")
+    @PersistenceContext
     private EntityManager entityManager;
+
 
     @Override
     public List<Person> index() {
         return entityManager.createQuery("SELECT p FROM Person p", Person.class).getResultList();
     }
 
+    @Transactional
     @Override
     public void save(Person person) {
         entityManager.persist(person);
@@ -35,6 +38,7 @@ public class JpaPersonDAO implements PersonDAO {
 
     }
 
+    @Transactional
     @Override
     public void update(UUID id, Person updatePerson) {
         TypedQuery<Person> typedQuery = entityManager.createQuery("UPDATE Person p SET p.first_name =:firstname, " +
@@ -48,6 +52,7 @@ public class JpaPersonDAO implements PersonDAO {
         typedQuery.setParameter("city", updatePerson.getCity());
     }
 
+    @Transactional
     @Override
     public void delete(UUID id) {
         TypedQuery<Person> typedQuery = entityManager.createQuery("DELETE FROM Person p WHERE p.id =:id", Person.class);

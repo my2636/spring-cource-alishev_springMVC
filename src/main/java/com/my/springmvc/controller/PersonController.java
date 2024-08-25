@@ -15,15 +15,13 @@ import java.util.UUID;
 @RequestMapping("/persons")
 public class PersonController {
 
-    private final JdbcPersonDAO JdbcPersonDAO;
+    private final JpaPersonDAO jpaPersonDAO;
     private final JpaVacationDAO jpaVacationDAO;
-    private final PersonDAO jpaPersonDAO;
 
     @Autowired
-    public PersonController(JdbcPersonDAO JdbcPersonDAO, JpaVacationDAO jpaVacationDAO, PersonDAO jpaPersonDAO) {
-        this.JdbcPersonDAO = JdbcPersonDAO;
-        this.jpaVacationDAO = jpaVacationDAO;
+    public PersonController(JpaPersonDAO jpaPersonDAO, JpaVacationDAO jpaVacationDAO) {
         this.jpaPersonDAO = jpaPersonDAO;
+        this.jpaVacationDAO = jpaVacationDAO;
     }
 
     // person
@@ -68,14 +66,14 @@ public class PersonController {
             return "persons/edit";
         }
 
-        JdbcPersonDAO.update(id, person);
+        jpaPersonDAO.update(id, person);
         return "redirect:/persons";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
-        JdbcPersonDAO.delete(id);
-//        jdbcVacationDAO.delete(id);
+        jpaPersonDAO.delete(id);
+        jpaVacationDAO.deletePersonVacations(id);
         return "redirect:/persons";
     }
 

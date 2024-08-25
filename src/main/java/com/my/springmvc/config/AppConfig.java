@@ -1,5 +1,9 @@
 package com.my.springmvc.config;
 
+import com.my.springmvc.dao.JpaPersonDAO;
+import com.my.springmvc.dao.JpaVacationDAO;
+import com.my.springmvc.dao.PersonDAO;
+import com.my.springmvc.dao.VacationDAO;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.annotation.Resource;
@@ -21,9 +25,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.my.springmvc")
@@ -122,8 +123,8 @@ public class AppConfig implements WebMvcConfigurer {
         return new JpaTransactionManager(entityManagerFactory().getObject());
     }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
+//    @Bean
+//    public JdbcTemplate jdbcTemplate() {
+//        return new JdbcTemplate(dataSource());
+//    }
 }

@@ -1,3 +1,4 @@
+/*
 package com.my.springmvc.dao;
 
 import com.my.springmvc.model.Person;
@@ -14,7 +15,7 @@ public class JdbcPersonDAO implements PersonDAO{
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+//    @Autowired
     public JdbcPersonDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -48,4 +49,4 @@ public class JdbcPersonDAO implements PersonDAO{
     public void delete(UUID id) {
         jdbcTemplate.update("DELETE FROM Person WHERE id=?", id);
     }
-}
+}*/

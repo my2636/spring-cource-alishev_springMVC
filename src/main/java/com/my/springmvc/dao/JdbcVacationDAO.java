@@ -1,6 +1,8 @@
+/*
 package com.my.springmvc.dao;
 
 import com.my.springmvc.model.Vacation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,7 @@ import static java.util.Arrays.stream;
 public class JdbcVacationDAO {
     private final JdbcTemplate jdbcTemplate;
 
+//    @Autowired
     public JdbcVacationDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -30,3 +33,4 @@ public class JdbcVacationDAO {
         jdbcTemplate.update("DELETE FROM Vacation WHERE person_id=?", personId);
     }
 }
+*/
