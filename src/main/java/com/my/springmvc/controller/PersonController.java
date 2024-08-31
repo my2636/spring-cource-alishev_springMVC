@@ -2,6 +2,7 @@ package com.my.springmvc.controller;
 
 import com.my.springmvc.dao.*;
 import com.my.springmvc.model.Person;
+import com.my.springmvc.model.Vacation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,19 +16,19 @@ import java.util.UUID;
 @RequestMapping("/persons")
 public class PersonController {
 
-    private final JpaPersonDAO jpaPersonDAO;
-    private final JpaVacationDAO jpaVacationDAO;
+    private final PersonDAO personDAO;
+    private final VacationDAO vacationDAO;
 
     @Autowired
-    public PersonController(JpaPersonDAO jpaPersonDAO, JpaVacationDAO jpaVacationDAO) {
-        this.jpaPersonDAO = jpaPersonDAO;
-        this.jpaVacationDAO = jpaVacationDAO;
+    public PersonController(PersonDAO personDAO, VacationDAO vacationDAO) {
+        this.personDAO = personDAO;
+        this.vacationDAO = vacationDAO;
     }
 
     // person
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("persons", jpaPersonDAO.index());
+        model.addAttribute("persons", personDAO.index());
         return "persons/index";
     }
 
@@ -42,20 +43,20 @@ public class PersonController {
             return "persons/new";
         }
 
-        jpaPersonDAO.save(person);
+        personDAO.save(person);
         return "redirect:/persons";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("person", jpaPersonDAO.show(id));
-        model.addAttribute("vacations", jpaVacationDAO.index(id));
+        model.addAttribute("person", personDAO.show(id));
+        model.addAttribute("vacations", vacationDAO.index(id));
         return "persons/show";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") UUID id) {
-        model.addAttribute("person", jpaPersonDAO.show(id));
+        model.addAttribute("person", personDAO.show(id));
         return "persons/edit";
     }
 
@@ -66,18 +67,23 @@ public class PersonController {
             return "persons/edit";
         }
 
-        jpaPersonDAO.update(id, person);
+        personDAO.update(person);
         return "redirect:/persons";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
-        jpaPersonDAO.delete(id);
-        jpaVacationDAO.deletePersonVacations(id);
+        personDAO.delete(id);
+        vacationDAO.deletePersonVacations(id);
         return "redirect:/persons";
     }
 
     // person vacations
 
+    @GetMapping("/{id}")
+    public String newVacation(@PathVariable("id") UUID id, @ModelAttribute("vacation") Vacation vacation) {
+        vacation.setPersonId(id);
+        return "vacations/new";
+    }
 
 }

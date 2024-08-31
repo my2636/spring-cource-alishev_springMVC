@@ -18,15 +18,15 @@ public class JpaVacationDAO implements VacationDAO {
     private EntityManager entityManager;
 
     @Override
-    public List<Vacation> index(UUID personId) {
-        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT * FROM Vacation v WHERE person_id =:personId", Vacation.class);
-         typedQuery.setParameter("personId", personId);
+    public List<Vacation> index(UUID id) {
+        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT v FROM Vacation v WHERE v.personId =:personId", Vacation.class);
+         typedQuery.setParameter("personId", id);
         return typedQuery.getResultList();
     }
 
     @Override
     public Vacation show(UUID id) {
-        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT v FROM Vacation v WHERE id =:id", Vacation.class);
+        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT v FROM Vacation v WHERE v.id =:id", Vacation.class);
         typedQuery.setParameter("id", id);
         return typedQuery.getResultList().stream().findAny().orElse(null);
     }
@@ -39,26 +39,27 @@ public class JpaVacationDAO implements VacationDAO {
 
     @Transactional
     @Override
-    public void update(UUID id, Vacation updatedVacation) {
-        TypedQuery<Vacation> typedQuery = entityManager.createQuery("UPDATE Vacation v SET v.person_id =:personId, " +
-                "v.vacation_name =:vacationName, v.date_start =:dateStart, v.date_finish =:dateFinish WHERE v.id =:id", Vacation.class);
-        typedQuery.setParameter("id", id);
-        typedQuery.setParameter("personId", updatedVacation.getPersonId());
-        typedQuery.setParameter("vacationName", updatedVacation.getVacationName());
-        typedQuery.setParameter("dateStart", updatedVacation.getDateStart());
-        typedQuery.setParameter("dateFinish", updatedVacation.getDateFinish());
+    public void update(Vacation updatedVacation) {
+        entityManager.merge(updatedVacation);
     }
 
     @Transactional
     @Override
     public void delete(UUID id) {
-        TypedQuery<Vacation> typedQuery = entityManager.createQuery("DELETE FROM Vacation v WHERE v.id =:id", Vacation.class);
+        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT v FROM Vacation v WHERE v.id =:id", Vacation.class);
         typedQuery.setParameter("id", id);
+        entityManager.remove(typedQuery.getSingleResult());
     }
 
     @Transactional
+    @Override
     public void deletePersonVacations(UUID personId) {
-        TypedQuery<Vacation> typedQuery = entityManager.createQuery("DELETE FROM Vacation v WHERE v.person_id =:personId", Vacation.class);
+        TypedQuery<Vacation> typedQuery = entityManager.createQuery("SELECT v FROM Vacation v WHERE v.personId =:personId", Vacation.class);
         typedQuery.setParameter("personId", personId);
+        try {
+            entityManager.remove(typedQuery.getSingleResult());
+        } catch (Exception e) {
+            System.out.println("no vacations for deleted person");
+        }
     }
 }

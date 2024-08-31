@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New vacation</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/vacations}" th:object="${vacation}">
+    <label for="vacationName">Введите название отпуска: </label>
+    <input type="text" th:field="*{vacationName}" id="vacationName">
+    <div style="color:red" th:if="${#fields.hasErrors('vacationName')}" th:errors="*{vacationName}">Некорректное название</div>
+    <br/>
+    <label for="dateStart">Введите дату начала отпуска: </label>
+    <input type="text" th:field="*{dateStart}" id="dateStart">
+    <div style="color:red" th:if="${#fields.hasErrors('dateStart')}" th:errors="*{dateStart}">Некорректная дата</div>
+    <br/>
+    <label for="dateFinish">Введите дату окончания отпуска: </label>
+    <input type="text" th:field="*{dateFinish}" id="dateFinish">
+    <div style="color:red" th:if="${#fields.hasErrors('dateFinish')}" th:errors="*{dateFinish}">Некорректная дата</div>
+
+    <br/>
+    <input type="submit" value="Добавить!">
+</form>
+
+</body>
+</html>

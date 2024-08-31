@@ -9,6 +9,6 @@ public interface PersonDAO {
     List<Person> index();
     Person show(UUID id);
     void save(Person person);
-    void update(UUID id, Person updatePerson);
+    void update(Person updatePerson);
     void delete(UUID id);
 }

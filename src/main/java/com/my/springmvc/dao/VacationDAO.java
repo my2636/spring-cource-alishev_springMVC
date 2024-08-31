@@ -10,6 +10,7 @@ public interface VacationDAO {
     List<Vacation> index(UUID personId);
     Vacation show(UUID vacationId);
     void save(Vacation vacation);
-    void update(UUID id, Vacation updatedVacation);
+    void update(Vacation updatedVacation);
     void delete(UUID id);
+    void deletePersonVacations(UUID personId);
 }

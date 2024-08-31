@@ -24,12 +24,6 @@ public class JpaPersonDAO implements PersonDAO {
         return entityManager.createQuery("SELECT p FROM Person p", Person.class).getResultList();
     }
 
-    @Transactional
-    @Override
-    public void save(Person person) {
-        entityManager.persist(person);
-    }
-
     @Override
     public Person show(UUID id) {
         TypedQuery<Person> typedQuery = entityManager.createQuery("SELECT p FROM Person p where p.id =:id", Person.class);
@@ -40,21 +34,21 @@ public class JpaPersonDAO implements PersonDAO {
 
     @Transactional
     @Override
-    public void update(UUID id, Person updatePerson) {
-        TypedQuery<Person> typedQuery = entityManager.createQuery("UPDATE Person p SET p.first_name =:firstname, " +
-                "p.last_name =:lastname, p.nickname =:nickname, p.email =:email, p.birthday =:birthday, p.city =:city WHERE p.id =:id", Person.class);
-        typedQuery.setParameter("id", id);
-        typedQuery.setParameter("firstname", updatePerson.getFirstName());
-        typedQuery.setParameter("lastname", updatePerson.getLastName());
-        typedQuery.setParameter("nickname", updatePerson.getNickname());
-        typedQuery.setParameter("email", updatePerson.getEmail());
-        typedQuery.setParameter("birthday", updatePerson.getBirthday());
-        typedQuery.setParameter("city", updatePerson.getCity());
+    public void save(Person person) {
+        entityManager.persist(person);
+    }
+
+    @Transactional
+    @Override
+    public void update(Person updatePerson) {
+        entityManager.merge(updatePerson);
     }
 
     @Transactional
     @Override
     public void delete(UUID id) {
-        TypedQuery<Person> typedQuery = entityManager.createQuery("DELETE FROM Person p WHERE p.id =:id", Person.class);
+        TypedQuery<Person> typedQuery = entityManager.createQuery("SELECT p FROM Person p WHERE p.id =:id", Person.class);
+        typedQuery.setParameter("id", id);
+        entityManager.remove(typedQuery.getSingleResult());
     }
 }
