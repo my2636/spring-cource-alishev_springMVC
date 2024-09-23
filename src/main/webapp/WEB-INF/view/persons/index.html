@@ -5,21 +5,36 @@
     <title>All we need vacation!</title>
 </head>
 <body>
-
-<div th:each="person : ${persons}" >
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getId()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getFirstName()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getLastName()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getNickname()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getEmail()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getBirthday()}">user</a>
-    <a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getCity()}">user</a>
-</div>
+<fieldset>
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Nickname</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody>
+<tr th:each="person : ${persons}" >
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getId()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getFirstName()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getLastName()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getNickname()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getEmail()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getBirthday()}">user</a></td>
+    <td><a th:href="@{/persons/{id}(id=${person.getId()})}" th:text="${person.getCity()}">user</a></td>
+</tr>
+    </tbody>
+</table>
 
 <br/>
 <hr/>
 
 <a href="/persons/new">Добавить пользователя</a>
-
+</fieldset>
 </body>
 </html>

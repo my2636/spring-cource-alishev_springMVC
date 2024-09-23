@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/vacations}" th:object="${vacation}">
+<form th:method="POST" th:action="@{/persons/{id}/vacations/new(id=${person.getId()})}" th:object="${vacation}">
     <label for="vacationName">Введите название отпуска: </label>
     <input type="text" th:field="*{vacationName}" id="vacationName">
     <div style="color:red" th:if="${#fields.hasErrors('vacationName')}" th:errors="*{vacationName}">Некорректное название</div>

@@ -22,15 +22,15 @@ public class VacationController {
 
 
 
-    @GetMapping("/{id}")
+/*    @GetMapping("/{id}")
     public String showVacation(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("vacation", vacationDAO.show(id));
         return "vacations/show";
-    }
+    }*/
 
 
 
-    @PostMapping()
+/*    @PostMapping()
     public String create(@ModelAttribute("vacation") @Valid Vacation vacation, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "vacations/new";
@@ -39,7 +39,7 @@ public class VacationController {
         vacationDAO.save(vacation);
         UUID id = vacation.getId();
         return "redirect:/vacations/{id}";
-    }
+    }*/
 
 /*
     @GetMapping("/{userId}")

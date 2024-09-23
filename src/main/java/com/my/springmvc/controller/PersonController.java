@@ -80,10 +80,19 @@ public class PersonController {
 
     // person vacations
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/vacations/new")
     public String newVacation(@PathVariable("id") UUID id, @ModelAttribute("vacation") Vacation vacation) {
-        vacation.setPersonId(id);
         return "vacations/new";
+    }
+
+    @PostMapping("/{id}/vacations")
+    public String createPersonVacation(@ModelAttribute("vacation") @Valid Vacation vacation, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "vacations/new";
+        }
+
+        vacationDAO.save(vacation);
+        return "redirect:/persons";
     }
 
 }
