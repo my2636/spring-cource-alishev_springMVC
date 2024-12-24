@@ -24,15 +24,28 @@
 <br/>
 
 <h3>Список отпусков:</h3>
-<div th:each="vacation : ${vacations}">
-    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getId()}">vacation</a>
-    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getPersonId()}">vacation</a>
-    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getVacationName()}">vacation</a>
-    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateStart()}">vacation</a>
-    <a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateFinish()}">vacation</a>
-    <br/>
-    <a href="/persons/{id}/">Добавить отпуск</a>
-</div>
+<table>
+    <thead>
+    <tr>
+        <th>Vacation ID</th>
+        <th>Person ID</th>
+        <th>Vacation name</th>
+        <th>Vacation start</th>
+        <th>Vacation finish</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="vacation : ${vacations}">
+            <td><a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getId()}">vacation</a></td>
+            <td><a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getPersonId()}">vacation</a></td>
+            <td><a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getVacationName()}">vacation</a></td>
+            <td><a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateStart()}">vacation</a></td>
+            <td><a th:href="@{/vacations/{id}(id=${vacation.getId()})}" th:text="${vacation.getDateFinish()}">vacation</a></td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+<a href="@{/persons/{id}/vacations/new(id=${person.getId()})}">Добавить отпуск</a>
 
 </body>
 </html>

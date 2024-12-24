@@ -1,11 +1,10 @@
 package com.my.springmvc.controller;
 
-import com.my.springmvc.dao.PersonDAO;
-import com.my.springmvc.dao.VacationDAO;
+import com.my.springmvc.dao.*;
 import com.my.springmvc.model.Person;
+import com.my.springmvc.model.Vacation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +25,7 @@ public class PersonController {
         this.vacationDAO = vacationDAO;
     }
 
+    // person
     @GetMapping
     public String index(Model model) {
         model.addAttribute("persons", personDAO.index());
@@ -67,14 +67,32 @@ public class PersonController {
             return "persons/edit";
         }
 
-        personDAO.update(id, person);
+        personDAO.update(person);
         return "redirect:/persons";
     }
 
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable("id") UUID id) {
         personDAO.delete(id);
-        vacationDAO.delete(id);
+        vacationDAO.deletePersonVacations(id);
         return "redirect:/persons";
     }
+
+    // person vacations
+
+    @GetMapping("/{id}/vacations/new")
+    public String newVacation(@PathVariable("id") UUID id, @ModelAttribute("vacation") Vacation vacation) {
+        return "vacations/new";
+    }
+
+    @PostMapping("/{id}/vacations")
+    public String createPersonVacation(@ModelAttribute("vacation") @Valid Vacation vacation, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "vacations/new";
+        }
+
+        vacationDAO.save(vacation);
+        return "redirect:/persons";
+    }
+
 }

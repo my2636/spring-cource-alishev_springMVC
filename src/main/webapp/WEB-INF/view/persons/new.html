@@ -9,27 +9,27 @@
 <form th:method="POST" th:action="@{/persons}" th:object="${person}">
     <label for="firstName">Введите имя: </label>
     <input type="text" th:field="*{firstName}" id="firstName">
-    <div style="..." th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
     <br/>
     <label for="lastName">Введите фамилию: </label>
     <input type="text" th:field="*{lastName}" id="lastName">
-    <div style="..." th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
     <br/>
     <label for="nickname">Введите ник: </label>
     <input type="text" th:field="*{nickname}" id="nickname">
-    <div style="..." th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Name error</div>
     <br/>
     <label for="email">Введите email: </label>
     <input type="text" th:field="*{email}" id="email">
-    <div style="..." th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
     <br/>
     <label for="birthday">Введите дату рождения: </label>
     <input type="text" th:field="*{birthday}" id="birthday">
-    <div style="..." th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Name error</div>
     <br/>
     <label for="city">Введите город: </label>
     <input type="text" th:field="*{city}" id="city">
-    <div style="..." th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Name error</div>
 
     <br/>
     <input type="submit" value="Добавить!">

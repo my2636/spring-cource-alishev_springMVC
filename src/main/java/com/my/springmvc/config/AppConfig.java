@@ -1,17 +1,23 @@
 package com.my.springmvc.config;
 
+import com.my.springmvc.dao.JpaPersonDAO;
+import com.my.springmvc.dao.JpaVacationDAO;
+import com.my.springmvc.dao.PersonDAO;
+import com.my.springmvc.dao.VacationDAO;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import jakarta.annotation.Resource;
-import jakarta.servlet.FilterRegistration;
-import org.apache.commons.dbcp2.BasicDataSource;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,16 +25,12 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.my.springmvc")
 @PropertySource("classpath:database.properties")
 @EnableWebMvc
+@EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -70,16 +72,24 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
-        entityManager.setDataSource(dataSource());
-        entityManager.setPackagesToScan(environment.getRequiredProperty("db.entity.package"));
-        entityManager.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManager.setJpaProperties(getHibernateProperties());
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setShowSql(true);
+        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
 
-        return entityManager;
+
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPackagesToScan(environment.getRequiredProperty("db.entity.package"));
+        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+ //       entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+
+        return entityManagerFactoryBean;
     }
 
-    private Properties getHibernateProperties() {
+    
+
+/*    private Properties getHibernateProperties() {
         try {
             Properties properties = new Properties();
             InputStream is = getClass().getClassLoader().getResourceAsStream("hibernate.properties");
@@ -89,21 +99,32 @@ public class AppConfig implements WebMvcConfigurer {
             throw new IllegalArgumentException("Can't load resource", e);
         }
 
+    }*/
+
+    @Bean
+    public HikariDataSource dataSource() {
+        HikariConfig config = new HikariConfig();
+
+        config.setDriverClassName(environment.getRequiredProperty("db.driver"));
+        config.setJdbcUrl(environment.getRequiredProperty("db.url"));
+        config.setUsername(environment.getRequiredProperty("db.username"));
+        config.setPassword(environment.getRequiredProperty("db.password"));
+
+        config.setMaximumPoolSize(Integer.valueOf(environment.getRequiredProperty("db.maximumPoolSize")));
+        config.setConnectionTimeout(Long.valueOf(environment.getRequiredProperty("db.connectionTimeout")));
+        config.setMinimumIdle(Integer.valueOf(environment.getRequiredProperty("db.minIdle")));
+        config.setMaxLifetime(Long.valueOf(environment.getRequiredProperty("db.maxLifetime")));
+
+        return new HikariDataSource(config);
     }
 
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("db.driver"));
-        dataSource.setUrl(environment.getRequiredProperty("db.url"));
-        dataSource.setUsername(environment.getRequiredProperty("db.username"));
-        dataSource.setPassword(environment.getRequiredProperty("db.password"));
-
-        return dataSource;
+    public PlatformTransactionManager transactionManager() {
+        return new JpaTransactionManager(entityManagerFactory().getObject());
     }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
-    }
+//    @Bean
+//    public JdbcTemplate jdbcTemplate() {
+//        return new JdbcTemplate(dataSource());
+//    }
 }

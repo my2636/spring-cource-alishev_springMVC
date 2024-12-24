@@ -2,8 +2,10 @@ package com.my.springmvc.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -24,15 +26,17 @@ public class Vacation {
     private UUID personId;
 
     @Column(name = "vacation_name")
-    @NotEmpty(message = "Поле обязательно для заполнения")
+    @NotNull(message = "Поле обязательно для заполнения")
     private String vacationName;
 
     @Column(name = "date_start")
-    @NotEmpty(message = "Поле обязательно для заполнения")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull(message = "Поле обязательно для заполнения")
     private LocalDate dateStart;
 
     @Column(name = "date_finish")
-    @NotEmpty(message = "Поле обязательно для заполнения")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull(message = "Поле обязательно для заполнения")
     private LocalDate dateFinish;
 
     @Column(name = "is_planned")
